@@ -1,2 +1,2 @@
 # slides
-Learning journey with Claude Code
+Learning with Claude Code
