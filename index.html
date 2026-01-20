@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Claude Code - Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, #16213e 100%);
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.1) 0%, transparent 30%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(5deg); }
+            66% { transform: translate(-20px, 20px) rotate(-3deg); }
+        }
+
+        /* Main container */
+        .presentation {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Slides container */
+        .slides-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Individual slide */
+        .slide {
+            position: absolute;
+            width: calc(100% - 4rem);
+            max-width: 1200px;
+            height: calc(100% - 8rem);
+            max-height: 800px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateX(100px) scale(0.95);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .slide.prev {
+            transform: translateX(-100px) scale(0.95);
+        }
+
+        /* Slide content */
+        .slide-number {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.75rem;
+        }
+
+        .slide-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            flex: 1;
+            overflow: hidden;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .slide-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-content ul, .slide-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .slide-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .slide-content code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(139, 92, 246, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: var(--accent-cyan);
+        }
+
+        .slide-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--glass-border);
+        }
+
+        .slide-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--accent-cyan);
+        }
+
+        .slide-content img {
+            max-width: 100%;
+            max-height: 200px;
+            height: auto;
+            border-radius: 12px;
+            margin: 0.75rem 0;
+            border: 1px solid var(--glass-border);
+            object-fit: contain;
+        }
+
+        /* Slide logo */
+        .slide-logo {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            max-height: 60px;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        /* Featured slide styles */
+        .slide.featured {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+        }
+
+        .slide.featured .slide-number {
+            display: none;
+        }
+
+        .slide.featured .slide-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .slide.featured .slide-content {
+            text-align: center;
+            font-size: 1.35rem;
+        }
+
+        .slide.featured .slide-content > p {
+            font-size: 1.25rem;
+        }
+
+        .slide.featured .slide-content img {
+            margin-top: 2rem;
+            max-height: 350px;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .highlight-box-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .highlight-box-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* Card style */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Best Practices Diagram */
+        .practices-diagram {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 320px;
+            margin: 0 auto;
+        }
+
+        .diagram-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .diagram-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .center-circle {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .center-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .diagram-node {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .node-1 { top: 5px; left: 50%; transform: translateX(-50%); }
+        .node-2 { top: 50%; right: -40px; transform: translateY(-50%); }
+        .node-3 { bottom: 5px; left: 50%; transform: translateX(-50%); }
+        .node-4 { top: 50%; left: -40px; transform: translateY(-50%); }
+
+        .node-number {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .node-content {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .node-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .node-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 3rem;
+            background: rgba(15, 15, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .slide-counter span {
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink), var(--accent-cyan));
+            transition: width 0.4s ease;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .slide-logo {
+                max-height: 40px;
+                max-width: 120px;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .slide-content.split-layout {
+                flex-direction: column;
+            }
+
+            .slide-content.split-layout img {
+                width: 100%;
+                max-width: 100%;
+                max-height: 200px;
+            }
+
+            .slide-content.split-layout .images-wrapper {
+                width: 100%;
+                max-width: 100%;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .slide-content.split-layout .images-wrapper img {
+                max-width: 50%;
+                max-height: 150px;
+            }
+
+            .slide {
+                padding: 2rem 1.5rem;
+                width: calc(100% - 2rem);
+                height: calc(100% - 6rem);
+                max-height: none;
+            }
+
+            .slide-title {
+                font-size: 1.75rem;
+            }
+
+            .slide.featured .slide-title {
+                font-size: 2rem;
+            }
+
+            .slide-content {
+                font-size: 1rem;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .navigation {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-btn span:not(.sr-only) {
+                display: none;
+            }
+
+            .slide-counter {
+                font-size: 0.8rem;
+            }
+
+            .practices-diagram {
+                max-width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .diagram-lines, .diagram-center {
+                display: none;
+            }
+
+            .diagram-node {
+                position: relative;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                justify-content: flex-start;
+            }
+
+            .node-content {
+                flex: 1;
+            }
+
+            /* Tips & Tricks Responsive */
+            .tips-diagram {
+                max-width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .tips-lines,
+            .tips-center {
+                display: none;
+            }
+
+            .tips-node {
+                position: relative;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                justify-content: flex-start;
+            }
+
+            /* Resources Responsive */
+            .resources-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .video-preview {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide.active .slide-title {
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .slide.active .slide-content {
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Scrollbar styling */
+        .slide-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .slide-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .slide-content::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 3px;
+        }
+
+        .slide-content::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-purple);
+        }
+
+        /* Split layout for slides with images */
+        .slide-content.split-layout {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .slide-content.split-layout .content-wrapper {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .slide-content.split-layout .images-wrapper {
+            flex-shrink: 0;
+            width: 350px;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .slide-content.split-layout .images-wrapper img {
+            width: 100%;
+            margin: 0;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            object-fit: contain;
+            height: auto;
+        }
+
+        .slide-content.split-layout .images-wrapper img:last-child {
+            min-height: 180px;
+            object-fit: cover;
+        }
+
+        .slide-content.split-layout img {
+            flex-shrink: 0;
+            width: 280px;
+            max-width: 280px;
+            margin: 0;
+            margin-top: 0.5rem;
+        }
+
+        /* Resource links */
+        .resource-link {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+        }
+
+        /* Tips & Tricks Diagram */
+        .tips-diagram {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 380px;
+            margin: 0 auto;
+        }
+
+        .tips-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .tips-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .tips-center-circle {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .tips-center-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .tips-node {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: fadeInScale 0.4s ease backwards;
+        }
+
+        .tips-node-1 { top: 5px; left: 50%; transform: translateX(-50%); animation-delay: 0.1s; }
+        .tips-node-2 { top: 22%; right: -65px; transform: translateY(-50%); animation-delay: 0.15s; }
+        .tips-node-3 { top: 65%; right: -75px; transform: translateY(-50%); animation-delay: 0.2s; }
+        .tips-node-4 { top: 22%; left: -50px; transform: translateY(-50%); animation-delay: 0.25s; }
+        .tips-node-5 { top: 65%; left: -75px; transform: translateY(-50%); animation-delay: 0.3s; }
+        .tips-node-6 { bottom: -10px; left: 50%; transform: translateX(-50%); animation-delay: 0.35s; }
+
+        .tips-node-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .tips-node-content {
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 0.4rem 0.7rem;
+        }
+
+        .tips-node-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tips-node-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.4); }
+            50% { box-shadow: 0 0 45px rgba(139, 92, 246, 0.6); }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Video Preview Styles */
+        .resources-layout {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .resources-left {
+            flex-shrink: 0;
+        }
+
+        .resources-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .video-preview {
+            position: relative;
+            display: block;
+            width: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--glass-border);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .video-preview:hover {
+            transform: scale(1.02);
+            border-color: var(--accent-purple);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+        }
+
+        .video-preview:hover .video-overlay {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .play-button {
+            width: 56px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .video-preview:hover .play-button {
+            transform: scale(1.1);
+        }
+
+        .video-label {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: white;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Resource Link Cards */
+        .resource-link-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .resource-link-card:hover {
+            transform: translateX(4px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+        }
+
+        .resource-card-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .resource-card-content {
+            flex: 1;
+        }
+
+        .resource-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .resource-card-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <div class="presentation">
+        <div class="slides-container">
+            <!-- Slide 1: Title -->
+            <div class="slide featured active" data-slide="1">
+                <img src="images/image1.jpg" alt="StoryBrain Logo" class="slide-logo">
+                <div class="slide-content">
+                    <h1 class="slide-title">Learning Claude Code</h1>
+                    <p>Your comprehensive guide to mastering AI-assisted software engineering</p>
+                    <img src="images/image2.jpg" alt="Claude Code Illustration">
+                </div>
+            </div>
+
+            <!-- Slide 2: Introduction -->
+            <div class="slide" data-slide="2">
+                <div class="slide-number">01</div>
+                <h2 class="slide-title">What is Claude Code?</h2>
+                <div class="slide-content">
+                    <p>Claude Code is Anthropic's official CLI for Claude - an interactive command-line tool that helps developers with software engineering tasks.</p>
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Why It Matters</div>
+                        <p>Claude Code transforms how you write software by combining Claude's advanced AI capabilities with direct terminal access, file editing, and codebase understanding.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Key Capabilities</div>
+                        <ul>
+                            <li>Write, edit, and refactor code across multiple files</li>
+                            <li>Debug complex issues with intelligent analysis</li>
+                            <li>Execute terminal commands safely</li>
+                            <li>Search and navigate large codebases efficiently</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Installation -->
+            <div class="slide" data-slide="3">
+                <div class="slide-number">02</div>
+                <h2 class="slide-title">Installation</h2>
+                <div class="slide-content">
+                    <p>Getting started with Claude Code is simple. Install it via npm with a single command:</p>
+                    <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+                    <p>After installation, you can start a session by running:</p>
+                    <pre><code>claude</code></pre>
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Requirements</div>
+                        <p>Node.js 18+ and an Anthropic API key</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Custom Commands -->
+            <div class="slide" data-slide="4">
+                <div class="slide-number">03</div>
+                <h2 class="slide-title">Custom Commands</h2>
+                <div class="slide-content">
+                    <p>Create your own slash commands to automate repetitive tasks and workflows.</p>
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Creating Custom Commands</div>
+                        <p>Create a <code>.claude/commands</code> directory and add files like <code>deploy.md</code>:</p>
+                        <pre><code>Run the deployment script:
+npm run build && npm run deploy</code></pre>
+                    </div>
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Using Arguments ($variable)</div>
+                        <p>Pass dynamic values to your commands using <code>$variable</code> syntax:</p>
+                        <pre><code>Create a new component named $component:
+npx create-component $component</code></pre>
+                        <p>Usage: <code>/component Button</code> → creates a Button component</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Integrations -->
+            <div class="slide" data-slide="5">
+                <div class="slide-number">04</div>
+                <h2 class="slide-title">Integrations & Extensions</h2>
+                <div class="slide-content split-layout">
+                    <div class="content-wrapper">
+                        <p>Claude Code integrates with your existing development tools and workflows.</p>
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-title">MCP Servers</div>
+                                <div class="card-text">Extend functionality with Model Context Protocol servers for custom tools and data sources</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">GitHub Integration</div>
+                                <div class="card-text">Native support for PRs, issues, and repository management directly from the CLI</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Hooks</div>
+                                <div class="card-text">Automate workflows with pre and post-command hooks for custom actions</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Claude Agent SDK</div>
+                                <div class="card-text">Build custom AI agents with Claude's powerful Agent SDK for specialized tasks</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="images-wrapper">
+                        <img src="images/image6.jpg" alt="Claude Code Integrations">
+                        <img src="images/image9.jpg" alt="Extensions Overview">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: GitHub Pages Example -->
+            <div class="slide" data-slide="6">
+                <div class="slide-number">05</div>
+                <h2 class="slide-title">Practical Example: GitHub Pages</h2>
+                <div class="slide-content split-layout">
+                    <div class="content-wrapper">
+                        <p>Let's see how to use Claude Code to quickly host a static site on GitHub Pages.</p>
+                        <div class="highlight-box">
+                            <div class="highlight-box-title">Step-by-Step</div>
+                            <ol>
+                                <li>Create a new GitHub repository for your project</li>
+                                <li>Ask Claude: "Create a simple HTML page and set up GitHub Pages"</li>
+                                <li>Claude creates the files and configures gh-pages branch</li>
+                                <li>Push to GitHub and your site is live!</li>
+                            </ol>
+                        </div>
+                        <p>This entire workflow takes just minutes with Claude Code handling all the setup.</p>
+                    </div>
+                    <img src="images/image8.jpg" alt="GitHub Pages Example">
+                </div>
+            </div>
+
+            <!-- Slide 7: Key Features -->
+            <div class="slide" data-slide="7">
+                <div class="slide-number">06</div>
+                <h2 class="slide-title">Key Features</h2>
+                <div class="slide-content">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-icon">🔍</div>
+                            <div class="card-title">Smart Code Search</div>
+                            <div class="card-text">Find anything in your codebase instantly with semantic understanding</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">✏️</div>
+                            <div class="card-title">Multi-file Editing</div>
+                            <div class="card-text">Make coordinated changes across multiple files simultaneously</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">🐛</div>
+                            <div class="card-title">Intelligent Debugging</div>
+                            <div class="card-text">Understand and fix bugs with detailed analysis</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">⌨️</div>
+                            <div class="card-title">Terminal Integration</div>
+                            <div class="card-text">Execute commands directly with built-in safety checks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Common Commands -->
+            <div class="slide" data-slide="8">
+                <div class="slide-number">07</div>
+                <h2 class="slide-title">Common Commands</h2>
+                <div class="slide-content">
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Essential Commands</div>
+                        <ul>
+                            <li><code>/help</code> - Show available commands and features</li>
+                            <li><code>/clear</code> - Clear the conversation context</li>
+                            <li><code>/commit</code> - Create a git commit with AI-generated message</li>
+                            <li><code>/review-pr</code> - Review a pull request</li>
+                            <li><code>Ctrl+C</code> - Cancel current operation</li>
+                        </ul>
+                    </div>
+                    <p>These slash commands help you perform common tasks quickly and efficiently.</p>
+                </div>
+            </div>
+
+            <!-- Slide 9: Best Practices -->
+            <div class="slide" data-slide="9">
+                <div class="slide-number">08</div>
+                <h2 class="slide-title">Best Practices</h2>
+                <div class="slide-content">
+                    <p>To get the most out of Claude Code, follow these guidelines:</p>
+                    <div class="practices-diagram">
+                        <div class="diagram-center">
+                            <div class="center-circle">
+                                <span class="center-text">Best<br>Practices</span>
+                            </div>
+                        </div>
+                        <div class="diagram-node node-1">
+                            <div class="node-number">01</div>
+                            <div class="node-content">
+                                <div class="node-title">Be Specific</div>
+                                <div class="node-desc">Clear, detailed instructions</div>
+                            </div>
+                        </div>
+                        <div class="diagram-node node-2">
+                            <div class="node-number">02</div>
+                            <div class="node-content">
+                                <div class="node-title">Context</div>
+                                <div class="node-desc">Share project background</div>
+                            </div>
+                        </div>
+                        <div class="diagram-node node-3">
+                            <div class="node-number">03</div>
+                            <div class="node-content">
+                                <div class="node-title">Iterate</div>
+                                <div class="node-desc">Refine based on feedback</div>
+                            </div>
+                        </div>
+                        <div class="diagram-node node-4">
+                            <div class="node-number">04</div>
+                            <div class="node-content">
+                                <div class="node-title">Verify</div>
+                                <div class="node-desc">Review before committing</div>
+                            </div>
+                        </div>
+                        <svg class="diagram-lines" viewBox="0 0 500 320">
+                            <circle cx="250" cy="160" r="55" fill="none" stroke="rgba(139, 92, 246, 0.3)" stroke-width="2"/>
+                            <line x1="250" y1="105" x2="250" y2="40" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="305" y1="160" x2="435" y2="160" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="250" y1="215" x2="250" y2="280" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="195" y1="160" x2="65" y2="160" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Workflows -->
+            <div class="slide" data-slide="10">
+                <div class="slide-number">09</div>
+                <h2 class="slide-title">Common Workflows</h2>
+                <div class="slide-content">
+                    <div class="highlight-box">
+                        <div class="highlight-box-title">Feature Development Workflow</div>
+                        <ol>
+                            <li>Describe the feature you want to build</li>
+                            <li>Let Claude explore your codebase structure</li>
+                            <li>Review the implementation plan</li>
+                            <li>Claude writes the code across files</li>
+                            <li>Test and iterate as needed</li>
+                            <li>Create a commit with generated message</li>
+                        </ol>
+                    </div>
+                    <p>This streamlined workflow helps you ship features faster while maintaining code quality.</p>
+                </div>
+            </div>
+
+            <!-- Slide 11: Tips & Tricks -->
+            <div class="slide" data-slide="11">
+                <div class="slide-number">10</div>
+                <h2 class="slide-title">Tips & Tricks</h2>
+                <div class="slide-content">
+                    <div class="tips-diagram">
+                        <!-- Center Circle -->
+                        <div class="tips-center">
+                            <div class="tips-center-circle">
+                                <span class="tips-center-text">⚡<br>Tips</span>
+                            </div>
+                        </div>
+
+                        <!-- Tips Nodes -->
+                        <div class="tips-node tips-node-1">
+                            <div class="tips-node-icon">⌨️</div>
+                            <div class="tips-node-content">
+                                <div class="tips-node-title">Keyboard</div>
+                                <div class="tips-node-desc">↑↓ Navigate | Tab Accept | Ctrl+C Cancel</div>
+                            </div>
+                        </div>
+
+                        <div class="tips-node tips-node-2">
+                            <div class="tips-node-icon">📁</div>
+                            <div class="tips-node-content">
+                                <div class="tips-node-title">Config</div>
+                                <div class="tips-node-desc">Use .claude/ for settings</div>
+                            </div>
+                        </div>
+
+                        <div class="tips-node tips-node-3">
+                            <div class="tips-node-icon">🔧</div>
+                            <div class="tips-node-content">
+                                <div class="tips-node-title">Skills</div>
+                                <div class="tips-node-desc">Create custom commands</div>
+                            </div>
+                        </div>
+
+                        <div class="tips-node tips-node-4">
+                            <div class="tips-node-icon">🪝</div>
+                            <div class="tips-node-content">
+                                <div class="tips-node-title">Hooks</div>
+                                <div class="tips-node-desc">Automate workflows</div>
+                            </div>
+                        </div>
+
+                        <div class="tips-node tips-node-5">
+                            <div class="tips-node-icon">🎯</div>
+                            <div class="tips-node-content">
+                                <div class="tips-node-title">Be Specific</div>
+                                <div class="tips-node-desc">Clear prompts = better results</div>
+                            </div>
+                        </div>
+
+                        <div class="tips-node tips-node-6">
+                            <div class="tips-node-icon">💡</div>
+                            <div class="tips-node-content">
+                                <div class="tips-node-title">/help</div>
+                                <div class="tips-node-desc">Discover anytime</div>
+                            </div>
+                        </div>
+
+                        <!-- Connection Lines -->
+                        <svg class="tips-lines" viewBox="0 0 500 380">
+                            <circle cx="250" cy="190" r="50" fill="none" stroke="rgba(139, 92, 246, 0.3)" stroke-width="2"/>
+                            <line x1="250" y1="140" x2="250" y2="80" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="300" y1="180" x2="400" y2="115" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="300" y1="200" x2="395" y2="250" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="200" y1="180" x2="90" y2="115" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="200" y1="200" x2="105" y2="250" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="250" y1="240" x2="250" y2="330" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: Resources -->
+            <div class="slide" data-slide="12">
+                <div class="slide-number">11</div>
+                <h2 class="slide-title">Resources</h2>
+                <div class="slide-content">
+                    <div class="resources-layout">
+                        <!-- Left: Video Preview -->
+                        <div class="resources-left">
+                            <a href="https://www.youtube.com/watch?v=6eBSHbLKuN0" target="_blank" class="video-preview">
+                                <img src="https://img.youtube.com/vi/6eBSHbLKuN0/hqdefault.jpg" alt="YouTube Tutorial Thumbnail" class="video-thumbnail">
+                                <div class="video-overlay">
+                                    <div class="play-button">
+                                        <svg viewBox="0 0 68 48" width="68" height="48">
+                                            <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
+                                            <path d="M 45,24 27,14 27,34" fill="#fff"/>
+                                        </svg>
+                                    </div>
+                                    <span class="video-label">Watch: Getting Started</span>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Right: Resource Cards -->
+                        <div class="resources-right">
+                            <a href="https://code.claude.com/docs/en/overview" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon">📚</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Documentation</div>
+                                    <div class="resource-card-text">Official docs with examples and guides</div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/anthropics/claude-code" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon">💻</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">GitHub</div>
+                                    <div class="resource-card-text">Source code and issue tracking</div>
+                                </div>
+                            </a>
+                            <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon">🎓</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Interactive Course</div>
+                                    <div class="resource-card-text">Claude Code in Action</div>
+                                </div>
+                            </a>
+                            <a href="https://x.com/affaanmustafa/status/2012378465664745795?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Guide on X</div>
+                                    <div class="resource-card-text">@affaanmustafa's tips</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <button class="nav-btn" id="prevBtn" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                <span>Previous</span>
+            </button>
+
+            <div class="slide-counter">
+                Slide <span id="currentSlide">1</span> of <span id="totalSlides">12</span>
+            </div>
+
+            <button class="nav-btn" id="nextBtn">
+                <span>Next</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+
+            <div class="progress-bar" id="progressBar"></div>
+        </nav>
+    </div>
+
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.currentSlideDisplay = document.getElementById('currentSlide');
+                this.totalSlidesDisplay = document.getElementById('totalSlides');
+                this.progressBar = document.getElementById('progressBar');
+
+                this.init();
+            }
+
+            init() {
+                this.totalSlidesDisplay.textContent = this.totalSlides;
+                this.updateProgress();
+
+                // Button events
+                this.prevBtn.addEventListener('click', () => this.previousSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => this.handleKeydown(e));
+
+                // Touch/swipe support
+                this.setupTouchNavigation();
+
+                // Update initial state
+                this.updateButtons();
+            }
+
+            goToSlide(index) {
+                if (index < 0 || index >= this.totalSlides) return;
+
+                // Remove active and prev classes from all slides
+                this.slides.forEach((slide, i) => {
+                    slide.classList.remove('active', 'prev');
+                    if (i < index) {
+                        slide.classList.add('prev');
+                    }
+                });
+
+                // Add active class to current slide
+                this.slides[index].classList.add('active');
+                this.currentSlide = index;
+
+                // Update UI
+                this.currentSlideDisplay.textContent = this.currentSlide + 1;
+                this.updateButtons();
+                this.updateProgress();
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.totalSlides - 1) {
+                    this.goToSlide(this.currentSlide + 1);
+                }
+            }
+
+            previousSlide() {
+                if (this.currentSlide > 0) {
+                    this.goToSlide(this.currentSlide - 1);
+                }
+            }
+
+            updateButtons() {
+                this.prevBtn.disabled = this.currentSlide === 0;
+                this.nextBtn.disabled = this.currentSlide === this.totalSlides - 1;
+            }
+
+            updateProgress() {
+                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+                this.progressBar.style.width = `${progress}%`;
+            }
+
+            handleKeydown(e) {
+                switch(e.key) {
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                    case ' ':
+                    case 'PageDown':
+                        e.preventDefault();
+                        this.nextSlide();
+                        break;
+                    case 'ArrowLeft':
+                    case 'ArrowUp':
+                    case 'PageUp':
+                        e.preventDefault();
+                        this.previousSlide();
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        this.goToSlide(0);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        this.goToSlide(this.totalSlides - 1);
+                        break;
+                }
+            }
+
+            setupTouchNavigation() {
+                let touchStartX = 0;
+                let touchEndX = 0;
+                const minSwipeDistance = 50;
+
+                document.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe();
+                }, { passive: true });
+
+                this.handleSwipe = () => {
+                    const swipeDistance = touchEndX - touchStartX;
+
+                    if (Math.abs(swipeDistance) < minSwipeDistance) return;
+
+                    if (swipeDistance > 0) {
+                        this.previousSlide();
+                    } else {
+                        this.nextSlide();
+                    }
+                };
+            }
+        }
+
+        // Initialize the presentation
+        document.addEventListener('DOMContentLoaded', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>
