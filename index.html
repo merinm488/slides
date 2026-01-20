@@ -538,20 +538,24 @@
             .slide-content.split-layout img {
                 width: 100%;
                 max-width: 100%;
-                max-height: 180px;
+                max-height: 200px;
                 margin-top: 0.5rem;
+                object-fit: contain;
             }
 
             .slide-content.split-layout .images-wrapper {
                 width: 100%;
                 max-width: 100%;
-                flex-direction: row;
-                gap: 0.5rem;
+                flex-direction: column;
+                gap: 0.75rem;
             }
 
             .slide-content.split-layout .images-wrapper img {
-                max-width: 50%;
-                max-height: 140px;
+                max-width: 100%;
+                max-height: 200px;
+                width: 100%;
+                min-height: auto;
+                object-fit: contain;
             }
 
             /* Grid layouts */
@@ -607,7 +611,8 @@
                 height: auto;
                 display: flex;
                 flex-direction: column;
-                gap: 0.75rem;
+                gap: 1rem;
+                width: 100%;
             }
 
             .tips-lines,
@@ -625,20 +630,33 @@
                 justify-content: flex-start;
                 width: 100%;
                 animation: none !important;
+                padding: 0.5rem;
+                background: rgba(139, 92, 246, 0.1);
+                border: 1px solid rgba(139, 92, 246, 0.2);
+                border-radius: 12px;
             }
 
             .tips-node-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 0.9rem;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+
+            .tips-node-content {
+                flex: 1;
+                min-width: 0;
+                background: transparent;
+                border: none;
+                padding: 0;
             }
 
             .tips-node-title {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
 
             .tips-node-desc {
-                font-size: 0.75rem;
+                font-size: 0.85rem;
             }
 
             /* Resources layout */
@@ -693,7 +711,8 @@
 
             /* Images in content */
             .slide-content img {
-                max-height: 150px;
+                max-height: 200px;
+                object-fit: contain;
             }
         }
 
