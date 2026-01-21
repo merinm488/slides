@@ -980,10 +980,16 @@
                 object-fit: contain;
             }
 
-            /* Theme button mobile adjustment */
+            /* Theme button mobile adjustment - move to top right */
             .theme-selector-fixed {
                 top: 1rem;
-                left: 1rem;
+                left: auto;
+                right: 1rem;
+            }
+
+            .theme-selector-fixed .theme-dropdown {
+                left: auto;
+                right: 0;
             }
 
             .theme-selector-fixed .settings-btn {
@@ -1037,10 +1043,16 @@
                 height: 18px;
             }
 
-            /* Theme button extra small adjustment */
+            /* Theme button extra small adjustment - move to top right */
             .theme-selector-fixed {
                 top: 0.75rem;
-                left: 0.75rem;
+                left: auto;
+                right: 0.75rem;
+            }
+
+            .theme-selector-fixed .theme-dropdown {
+                left: auto;
+                right: 0;
             }
 
             .theme-selector-fixed .settings-btn {
