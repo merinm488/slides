@@ -25,6 +25,82 @@
             --text-secondary: #94a3b8;
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(15, 15, 26, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --code-bg: rgba(0, 0, 0, 0.3);
+            --highlight-bg: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #e2e8f0;
+            --accent-purple: #7c3aed;
+            --accent-pink: #db2777;
+            --accent-blue: #2563eb;
+            --accent-cyan: #0891b2;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(0, 0, 0, 0.02);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(248, 250, 252, 0.9);
+            --card-bg: rgba(0, 0, 0, 0.02);
+            --code-bg: rgba(0, 0, 0, 0.05);
+            --highlight-bg: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%);
+        }
+
+        /* Sepia Theme */
+        [data-theme="sepia"] {
+            --bg-primary: #f4ecd8;
+            --bg-secondary: #e8dcc8;
+            --accent-purple: #8b4513;
+            --accent-pink: #cd853f;
+            --accent-blue: #a0522d;
+            --accent-cyan: #8b7355;
+            --text-primary: #3e2723;
+            --text-secondary: #6d4c41;
+            --glass-bg: rgba(139, 69, 19, 0.05);
+            --glass-border: rgba(139, 69, 19, 0.15);
+            --nav-bg: rgba(244, 236, 216, 0.9);
+            --card-bg: rgba(139, 69, 19, 0.03);
+            --code-bg: rgba(139, 69, 19, 0.1);
+            --highlight-bg: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(205, 133, 63, 0.08) 100%);
+        }
+
+        /* Ocean Theme */
+        [data-theme="ocean"] {
+            --bg-primary: #0c1929;
+            --bg-secondary: #132238;
+            --accent-purple: #0ea5e9;
+            --accent-pink: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #22d3d3;
+            --text-primary: #e0f2fe;
+            --text-secondary: #7dd3fc;
+            --glass-bg: rgba(14, 165, 233, 0.05);
+            --glass-border: rgba(14, 165, 233, 0.15);
+            --nav-bg: rgba(12, 25, 41, 0.9);
+            --card-bg: rgba(14, 165, 233, 0.03);
+            --code-bg: rgba(0, 0, 0, 0.3);
+            --highlight-bg: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(34, 211, 211, 0.08) 100%);
+        }
+
+        /* Forest Theme */
+        [data-theme="forest"] {
+            --bg-primary: #0d1f0d;
+            --bg-secondary: #1a2e1a;
+            --accent-purple: #22c55e;
+            --accent-pink: #16a34a;
+            --accent-blue: #4ade80;
+            --accent-cyan: #86efac;
+            --text-primary: #ecfccb;
+            --text-secondary: #a3e635;
+            --glass-bg: rgba(34, 197, 94, 0.05);
+            --glass-border: rgba(34, 197, 94, 0.15);
+            --nav-bg: rgba(13, 31, 13, 0.9);
+            --card-bg: rgba(34, 197, 94, 0.03);
+            --code-bg: rgba(0, 0, 0, 0.3);
+            --highlight-bg: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(74, 222, 128, 0.08) 100%);
         }
 
         body {
@@ -32,6 +108,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* Animated background */
@@ -157,12 +234,13 @@
         }
 
         .slide-content pre {
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--code-bg);
             border-radius: 12px;
             padding: 1rem;
             overflow-x: auto;
             margin: 1rem 0;
             border: 1px solid var(--glass-border);
+            transition: background 0.3s ease;
         }
 
         .slide-content pre code {
@@ -222,11 +300,12 @@
 
         /* Highlight boxes */
         .highlight-box {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+            background: var(--highlight-bg);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 1rem;
             margin: 0.75rem 0;
+            transition: background 0.3s ease;
         }
 
         .highlight-box-title {
@@ -263,7 +342,7 @@
 
         /* Card style */
         .card {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--card-bg);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 1rem;
@@ -272,7 +351,8 @@
 
         .card:hover {
             transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
+            filter: brightness(1.1);
         }
 
         .card-icon {
@@ -297,7 +377,7 @@
             width: 100%;
             max-width: 500px;
             height: 320px;
-            margin: 0 auto;
+            margin: 60px auto 0 auto;
         }
 
         .diagram-lines {
@@ -343,9 +423,9 @@
         }
 
         .node-1 { top: 5px; left: 50%; transform: translateX(-50%); }
-        .node-2 { top: 50%; right: -40px; transform: translateY(-50%); }
+        .node-2 { top: 50%; right: -80px; transform: translateY(-50%); }
         .node-3 { bottom: 5px; left: 50%; transform: translateX(-50%); }
-        .node-4 { top: 50%; left: -40px; transform: translateY(-50%); }
+        .node-4 { top: 50%; left: -70px; transform: translateY(-50%); }
 
         .node-number {
             width: 36px;
@@ -385,9 +465,10 @@
             align-items: center;
             justify-content: space-between;
             padding: 1.5rem 3rem;
-            background: rgba(15, 15, 26, 0.8);
+            background: var(--nav-bg);
             backdrop-filter: blur(10px);
             border-top: 1px solid var(--glass-border);
+            transition: background 0.3s ease;
         }
 
         .nav-btn {
@@ -441,6 +522,162 @@
             height: 3px;
             background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink), var(--accent-cyan));
             transition: width 0.4s ease;
+        }
+
+        /* Settings button */
+        .settings-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .settings-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Theme selector dropdown */
+        .theme-selector {
+            position: relative;
+        }
+
+        .theme-dropdown {
+            position: absolute;
+            bottom: calc(100% + 0.5rem);
+            right: 0;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 0.75rem;
+            min-width: 200px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .theme-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .theme-dropdown-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: left;
+        }
+
+        .theme-option:hover {
+            background: var(--glass-bg);
+        }
+
+        .theme-option.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.1));
+            border: 1px solid var(--accent-purple);
+        }
+
+        .theme-preview {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid var(--glass-border);
+        }
+
+        .theme-preview.dark { background: linear-gradient(135deg, #0f0f1a, #8b5cf6); }
+        .theme-preview.light { background: linear-gradient(135deg, #f8fafc, #7c3aed); }
+        .theme-preview.sepia { background: linear-gradient(135deg, #f4ecd8, #8b4513); }
+        .theme-preview.ocean { background: linear-gradient(135deg, #0c1929, #0ea5e9); }
+        .theme-preview.forest { background: linear-gradient(135deg, #0d1f0d, #22c55e); }
+
+        .theme-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Fixed position theme button in top left */
+        .theme-selector-fixed {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1000;
+        }
+
+        .theme-selector-fixed .theme-dropdown {
+            bottom: auto;
+            top: calc(100% + 0.5rem);
+            left: 0;
+        }
+
+        /* 3-Column Resources Layout (Desktop) */
+        .resources-layout-3col {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .resources-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            min-width: 0;
+        }
+
+        .resources-col-compact .resource-link-card {
+            padding: 0.6rem 0.75rem;
+        }
+
+        .resources-col-compact .resource-card-icon {
+            font-size: 1.25rem;
+        }
+
+        .resources-col-compact .resource-card-title {
+            font-size: 0.9rem;
+        }
+
+        .resources-col-compact .resource-card-text {
+            font-size: 0.75rem;
         }
 
         /* Responsive design */
@@ -677,6 +914,16 @@
                 font-size: 0.85rem;
             }
 
+            /* 3-Column Resources - Stack vertically on mobile */
+            .resources-layout-3col {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .resources-col {
+                width: 100%;
+            }
+
             /* Resources layout */
             .resources-layout {
                 flex-direction: column;
@@ -732,6 +979,25 @@
                 max-height: 200px;
                 object-fit: contain;
             }
+
+            /* Theme button mobile adjustment */
+            .theme-selector-fixed {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .theme-selector-fixed .settings-btn {
+                padding: 0.6rem;
+            }
+
+            .theme-selector-fixed .settings-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .theme-selector-fixed .theme-dropdown {
+                min-width: 180px;
+            }
         }
 
         /* Extra small devices */
@@ -769,6 +1035,25 @@
             .nav-btn svg {
                 width: 18px;
                 height: 18px;
+            }
+
+            /* Theme button extra small adjustment */
+            .theme-selector-fixed {
+                top: 0.75rem;
+                left: 0.75rem;
+            }
+
+            .theme-selector-fixed .settings-btn {
+                padding: 0.5rem;
+            }
+
+            .theme-selector-fixed .settings-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .theme-selector-fixed .theme-dropdown {
+                min-width: 160px;
             }
         }
 
@@ -933,10 +1218,10 @@
         }
 
         .tips-node-1 { top: 5px; left: 50%; transform: translateX(-50%); animation-delay: 0.1s; }
-        .tips-node-2 { top: 22%; right: -65px; transform: translateY(-50%); animation-delay: 0.15s; }
-        .tips-node-3 { top: 65%; right: -75px; transform: translateY(-50%); animation-delay: 0.2s; }
+        .tips-node-2 { top: 28%; right: -65px; transform: translateY(-50%); animation-delay: 0.15s; }
+        .tips-node-3 { top: 65%; right: -100px; transform: translateY(-50%); animation-delay: 0.2s; }
         .tips-node-4 { top: 22%; left: -50px; transform: translateY(-50%); animation-delay: 0.25s; }
-        .tips-node-5 { top: 65%; left: -75px; transform: translateY(-50%); animation-delay: 0.3s; }
+        .tips-node-5 { top: 65%; left: -123px; transform: translateY(-50%); animation-delay: 0.3s; }
         .tips-node-6 { bottom: -10px; left: 50%; transform: translateX(-50%); animation-delay: 0.35s; }
 
         .tips-node-icon {
@@ -1089,6 +1374,10 @@
             flex-shrink: 0;
         }
 
+        .resource-card-icon.x-icon {
+            color: var(--accent-purple);
+        }
+
         .resource-card-content {
             flex: 1;
         }
@@ -1107,6 +1396,44 @@
 </head>
 <body>
     <div class="background"></div>
+
+    <!-- Theme Settings (Fixed Top Left) -->
+    <div class="theme-selector theme-selector-fixed">
+        <button class="settings-btn" id="settingsBtn" aria-label="Change theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+        </button>
+        <div class="theme-dropdown" id="themeDropdown">
+            <div class="theme-dropdown-title">Choose Theme</div>
+            <button class="theme-option active" data-theme="dark">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-preview dark"></span>
+                <span>Dark</span>
+            </button>
+            <button class="theme-option" data-theme="light">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-preview light"></span>
+                <span>Light</span>
+            </button>
+            <button class="theme-option" data-theme="sepia">
+                <span class="theme-icon">📖</span>
+                <span class="theme-preview sepia"></span>
+                <span>Sepia</span>
+            </button>
+            <button class="theme-option" data-theme="ocean">
+                <span class="theme-icon">🌊</span>
+                <span class="theme-preview ocean"></span>
+                <span>Ocean</span>
+            </button>
+            <button class="theme-option" data-theme="forest">
+                <span class="theme-icon">🌲</span>
+                <span class="theme-preview forest"></span>
+                <span>Forest</span>
+            </button>
+        </div>
+    </div>
 
     <div class="presentation">
         <div class="slides-container">
@@ -1326,10 +1653,10 @@ npx create-component $component</code></pre>
                         </div>
                         <svg class="diagram-lines" viewBox="0 0 500 320">
                             <circle cx="250" cy="160" r="55" fill="none" stroke="rgba(139, 92, 246, 0.3)" stroke-width="2"/>
-                            <line x1="250" y1="105" x2="250" y2="40" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
-                            <line x1="305" y1="160" x2="435" y2="160" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
-                            <line x1="250" y1="215" x2="250" y2="280" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
-                            <line x1="195" y1="160" x2="65" y2="160" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="250" y1="105" x2="250" y2="70" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="305" y1="160" x2="355" y2="160" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="250" y1="215" x2="250" y2="250" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="195" y1="160" x2="160" y2="160" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
                         </svg>
                     </div>
                 </div>
@@ -1424,7 +1751,7 @@ npx create-component $component</code></pre>
                             <line x1="300" y1="180" x2="400" y2="115" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
                             <line x1="300" y1="200" x2="395" y2="250" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
                             <line x1="200" y1="180" x2="90" y2="115" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
-                            <line x1="200" y1="200" x2="105" y2="250" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                            <line x1="200" y1="200" x2="100" y2="240" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
                             <line x1="250" y1="240" x2="250" y2="330" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
                         </svg>
                     </div>
@@ -1436,8 +1763,8 @@ npx create-component $component</code></pre>
                 <div class="slide-number">11</div>
                 <h2 class="slide-title">Resources</h2>
                 <div class="slide-content">
-                    <div class="resources-layout">
-                        <!-- Left: Video Preview -->
+                    <div class="resources-layout-3col">
+                        <!-- Column 1: Video Preview -->
                         <div class="resources-left">
                             <a href="https://www.youtube.com/watch?v=6eBSHbLKuN0" target="_blank" class="video-preview">
                                 <img src="https://img.youtube.com/vi/6eBSHbLKuN0/hqdefault.jpg" alt="YouTube Tutorial Thumbnail" class="video-thumbnail">
@@ -1453,20 +1780,20 @@ npx create-component $component</code></pre>
                             </a>
                         </div>
 
-                        <!-- Right: Resource Cards -->
-                        <div class="resources-right">
+                        <!-- Column 2: Official Resources -->
+                        <div class="resources-col resources-col-compact">
                             <a href="https://code.claude.com/docs/en/overview" target="_blank" class="resource-link-card">
                                 <div class="resource-card-icon">📚</div>
                                 <div class="resource-card-content">
                                     <div class="resource-card-title">Documentation</div>
-                                    <div class="resource-card-text">Official docs with examples and guides</div>
+                                    <div class="resource-card-text">Official docs and guides</div>
                                 </div>
                             </a>
                             <a href="https://github.com/anthropics/claude-code" target="_blank" class="resource-link-card">
                                 <div class="resource-card-icon">💻</div>
                                 <div class="resource-card-content">
                                     <div class="resource-card-title">GitHub</div>
-                                    <div class="resource-card-text">Source code and issue tracking</div>
+                                    <div class="resource-card-text">Source code</div>
                                 </div>
                             </a>
                             <a href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" class="resource-link-card">
@@ -1476,11 +1803,64 @@ npx create-component $component</code></pre>
                                     <div class="resource-card-text">Claude Code in Action</div>
                                 </div>
                             </a>
-                            <a href="https://x.com/affaanmustafa/status/2012378465664745795?s=46" target="_blank" class="resource-link-card">
-                                <div class="resource-card-icon">𝕏</div>
+                            <a href="https://ccforeveryone.com/" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon">🌐</div>
                                 <div class="resource-card-content">
-                                    <div class="resource-card-title">Guide on X</div>
-                                    <div class="resource-card-text">@affaanmustafa's tips</div>
+                                    <div class="resource-card-title">CC for Everyone</div>
+                                    <div class="resource-card-text">Learn Claude Code</div>
+                                </div>
+                            </a>
+                            <a href="https://github.com/glittercowboy/get-shit-done" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon">⚡</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Get Shit Done</div>
+                                    <div class="resource-card-text">Productivity tool</div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Column 3: Community Posts -->
+                        <div class="resources-col resources-col-compact">
+                            <a href="https://x.com/affaanmustafa/status/2012378465664745795?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon x-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Claude Code Guide</div>
+                                    <div class="resource-card-text">@affaanmustafa</div>
+                                </div>
+                            </a>
+                            <a href="https://x.com/emollick/status/2011288654728348152?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon x-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Ethan Mollick</div>
+                                    <div class="resource-card-text">AI writing insights</div>
+                                </div>
+                            </a>
+                            <a href="https://x.com/claudecoders/status/2011252389404365191?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon x-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Claude Coders</div>
+                                    <div class="resource-card-text">Tips & workflows</div>
+                                </div>
+                            </a>
+                            <a href="https://x.com/claudecoders/status/2011174759422443671?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon x-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Claude Coders</div>
+                                    <div class="resource-card-text">Advanced usage</div>
+                                </div>
+                            </a>
+                            <a href="https://x.com/ashpreetbedi/status/2011220028453241218?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon x-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Ashpreet Bedi</div>
+                                    <div class="resource-card-text">Practical advice</div>
+                                </div>
+                            </a>
+                            <a href="https://x.com/claudeai/status/2010805685530038351?s=46" target="_blank" class="resource-link-card">
+                                <div class="resource-card-icon x-icon">𝕏</div>
+                                <div class="resource-card-content">
+                                    <div class="resource-card-title">Claude AI</div>
+                                    <div class="resource-card-text">Official tips</div>
                                 </div>
                             </a>
                         </div>
@@ -1514,6 +1894,77 @@ npx create-component $component</code></pre>
     </div>
 
     <script>
+        // Theme Manager - handles theme switching and persistence
+        class ThemeManager {
+            constructor() {
+                this.currentTheme = localStorage.getItem('slideTheme') || 'dark';
+                this.settingsBtn = document.getElementById('settingsBtn');
+                this.themeDropdown = document.getElementById('themeDropdown');
+                this.themeOptions = document.querySelectorAll('.theme-option');
+
+                this.init();
+            }
+
+            init() {
+                // Apply saved theme on load
+                this.applyTheme(this.currentTheme);
+
+                // Settings button click
+                this.settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleDropdown();
+                });
+
+                // Theme option clicks
+                this.themeOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const theme = option.dataset.theme;
+                        this.setTheme(theme);
+                        this.toggleDropdown();
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.themeDropdown.contains(e.target) && !this.settingsBtn.contains(e.target)) {
+                        this.closeDropdown();
+                    }
+                });
+            }
+
+            toggleDropdown() {
+                this.themeDropdown.classList.toggle('show');
+            }
+
+            closeDropdown() {
+                this.themeDropdown.classList.remove('show');
+            }
+
+            setTheme(theme) {
+                this.currentTheme = theme;
+                this.applyTheme(theme);
+                localStorage.setItem('slideTheme', theme);
+            }
+
+            applyTheme(theme) {
+                // Set data attribute on html element
+                if (theme === 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
+                } else {
+                    document.documentElement.setAttribute('data-theme', theme);
+                }
+
+                // Update active state in dropdown
+                this.themeOptions.forEach(option => {
+                    if (option.dataset.theme === theme) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+            }
+        }
+
         class SlidePresentation {
             constructor() {
                 this.slides = document.querySelectorAll('.slide');
@@ -1641,8 +2092,9 @@ npx create-component $component</code></pre>
             }
         }
 
-        // Initialize the presentation
+        // Initialize the presentation and theme manager
         document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
             new SlidePresentation();
         });
     </script>
